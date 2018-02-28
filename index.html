@@ -58,9 +58,184 @@
         </section>
 
         <section>
-          <h3></h3>
+          <h3>Motivation</h3>
+          <p>
+            The web is made to share things. In fact the web was invented precisely
+            to have access to documents on machines at CERN without having to login to them.
+          </p>
+          <blockquote>
+            “Well, I found it frustrating that in those days, there was different information on different computers, but you had to log on to different computers to get at it. Also, sometimes you had to learn a different program on each computer. So finding out how things worked was really difficult. Often it was just easier to go and ask people when they were having coffee.”
+          </blockquote>
+          <a href="https://www.w3.org/People/Berners-Lee/Kids.html">--Tim Berners-Lee</a>
         </section>
 
+        <section>
+          <h3>Motivation</h3>
+          <p>
+            Documents turned into videos, then Java applets, and now with HTML5 we have virtually anything you can think of that would typically be desktop application.
+          </p>
+          <p>
+            Even mobile applications and VR applications are moving away from native app development to simply wrapping HTML5 standard documents with almost all the same functionality and performance.
+          </p>
+        </section>
+
+        <section>
+          <h3>Motivation</h3>
+          <p>
+            Clearly, then, we need to strive for the best way to describe a particular
+            set of interactions on a web page given all the possibilities.
+            I hope to show that react is one of the best ways to do this.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Before talking about React, one must introduce the Document Object Model (DOM).
+          </p>
+          <p>
+            The DOM is an abstract representation of the state of the web page in the browser.
+            The DOM is traversed by recursively dispatched subroutines in the browser for each type of encountered element.
+            What you are left with is not only the rendered web page, but also a queryable structure to intersect screen positions with your element boxes.
+          </p>
+          <p>
+            All of this is abstracted away from you when you write your HTML and event handlers.
+          </p>
+        </section>
+
+        <section>
+          <img src="static/pic_htmltree.gif" />
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            The problem with modern applications is that it would normally require many DOM manipulations to model the interactions.
+            These operations are defined on this <code>document</code> global variable and so we end up with tightly coupled concerns.
+            jQuery makes life easier but it doesn't mean your code will neccesarily compose with other systems without conflicts.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Those of us who use react probably noticed that these issues are greatly reduced.
+          </p>
+          <ul>
+            <li>Components are modular.</li>
+            <li>Components manage their own state.</li>
+            <li>Most components do not need to operate on the DOM directly</li>
+            <li>Your UI is defined in a declarative way</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Facebook made this possible in React by using a virtual DOM.
+          </p>
+          <p>
+            A virtual DOM is lightweight representation of the DOM itself that can heuristically be compared with other virtual DOMS.
+            Facebook is always optimising how to find the most efficient ways to take two virtual DOMS and find the minimal set of operations
+            to move from one to the other given the current structure of the DOM.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            All we have to do as developers is define what our particular component looks like as a virtual DOM node. We can define our component
+            in terms of other components and get more complex sub structures in our virtual DOM.
+          </p>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<ul id='todo-list1'></ul>
+<input id='input1' type='text' />
+<button id='submit1'>submit</button>
+<script>
+window.onload = function() {
+  var todoList = document.querySelector('#todo-list1');
+  var input = document.querySelector('#input1');
+  var button = document.querySelector('#submit1');
+  button.addEventListener('click', function() {
+    var child = document.createElement('li')
+    var deleter = document.createElement('span');
+    deleter.innerHTML=' -- delete';
+    child.innerHTML=input.value;
+    child.appendChild(deleter);
+    todoList.appendChild(child);
+    deleter.addEventListener('click', function() {
+      todoList.removeChild(child);
+    });
+  })
+}
+</script>
+            </code>
+          </pre>
+        </section>
+
+        <section>
+<div style="display: flex; margin-left: 30%; justify-content: center; flex-direction: column; width: 300px;">
+  <ul id='todo-list1'></ul>
+  <input id='input1' type='text' />
+  <button id='submit1'>submit</button>
+</div>
+<script>
+window.onload = function() {
+  var todoList = document.querySelector('#todo-list1');
+  var input = document.querySelector('#input1');
+  var button = document.querySelector('#submit1');
+  button.addEventListener('click', function() {
+    var child = document.createElement('li')
+    var deleter = document.createElement('span');
+    deleter.innerHTML=' -- delete';
+    child.innerHTML=input.value;
+    input.value='';
+    child.appendChild(deleter);
+    todoList.appendChild(child);
+    deleter.addEventListener('click', function() {
+      todoList.removeChild(child);
+    });
+  })
+}
+</script>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<div id='root1'></div>
+<script>
+window.onload = function() {
+
+}
+</script>
+            </code>
+          </pre>
+        </section>
+        <section>
+          <h3>But why React instead of templating?</h3>
+          <p>
+            Templating frameworks like smarty do actually solve all the problems around composable markup on a web page.
+          </p>
+          <p>
+            The part that is missing is having templates that actually need to operate on the DOM.
+            React gives us a component lifetime to encapsulate operations on DOM nodes created after render.
+            This is not suggested but there are situations that can only be solved by DOM operations.
+          </p>
+        </section>
+
+
+        <section>
+          <h3>But why React instead of templating?</h3>
+          <p>
+            React components are also treated as values. One can <code>return</code> an appriopriate component based
+            on the results of computations or HTTP requests.
+          </p>
+        </section>
         <!-- Thanks -->
         <section>
           <h2>Thanks!</h2>
