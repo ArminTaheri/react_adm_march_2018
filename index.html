@@ -21,7 +21,8 @@
 
     <!-- Code syntax highlighting -->
     <link rel="stylesheet" href="lib/css/zenburn.css">
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.2.0/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.2.0/umd/react-dom.development.js"></script>
     <!-- Printing and PDF exports -->
     <script>
       var link = document.createElement( 'link' );
@@ -50,9 +51,8 @@
           <ul>
             <li>Motivation</li>
             <li>DOM vs. Virtual DOM</li>
-            <li>State</li>
+            <li>React Terminology</li>
             <li>Webpack Presets and JSX</li>
-            <li>Advanced State</li>
             <li>Flow Types</li>
           </ul>
         </section>
@@ -64,7 +64,12 @@
             to have access to documents on machines at CERN without having to login to them.
           </p>
           <blockquote>
-            “Well, I found it frustrating that in those days, there was different information on different computers, but you had to log on to different computers to get at it. Also, sometimes you had to learn a different program on each computer. So finding out how things worked was really difficult. Often it was just easier to go and ask people when they were having coffee.”
+            “Well, I found it frustrating that in those days, there was different
+            information on different computers, but you had to log on to different
+            computers to get at it. Also, sometimes you had to learn a different
+            program on each computer. So finding out how things worked was really
+            difficult. Often it was just easier to go and ask people when
+            they were having coffee.”
           </blockquote>
           <a href="https://www.w3.org/People/Berners-Lee/Kids.html">--Tim Berners-Lee</a>
         </section>
@@ -72,10 +77,14 @@
         <section>
           <h3>Motivation</h3>
           <p>
-            Documents turned into videos, then Java applets, and now with HTML5 we have virtually anything you can think of that would typically be desktop application.
+            Documents now have videos, at some point Java applets, and now with HTML5,
+            virtually anything you can think of that would typically be in a
+            desktop application.
           </p>
           <p>
-            Even mobile applications and VR applications are moving away from native app development to simply wrapping HTML5 standard documents with almost all the same functionality and performance.
+            Even mobile applications and VR applications are moving away from
+            native app development to simply wrapping HTML5 standard documents
+            with almost all the same functionality and performance.
           </p>
         </section>
 
@@ -123,7 +132,7 @@
           </p>
           <ul>
             <li>Components are modular.</li>
-            <li>Components manage their own state.</li>
+            <li>Components can manage their own state.</li>
             <li>Most components do not need to operate on the DOM directly</li>
             <li>Your UI is defined in a declarative way</li>
           </ul>
@@ -144,8 +153,10 @@
         <section>
           <h3>DOM vs. Virtual DOM</h3>
           <p>
-            All we have to do as developers is define what our particular component looks like as a virtual DOM node. We can define our component
-            in terms of other components and get more complex sub structures in our virtual DOM.
+            All we have to do as developers is define what our particular
+            component looks like as a virtual DOM node. We can define our component
+            in terms of other components and get more complex sub structures
+            in our virtual DOM.
           </p>
         </section>
 
@@ -207,15 +218,150 @@ window.onload = function() {
         <section>
           <pre>
             <code>
-<div id='root1'></div>
-<script>
-window.onload = function() {
-
+import React, {Component} from 'react';
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { todos: props.initialTodos };
+    this.addTodo = this.addTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+  }
+  addTodo() {
+    this.setState({
+      text: "",
+      todos: this.state.todos.concat([this.state.text])
+    });
+  }
+  deleteTodo(item) {
+    this.setState({
+      todos: this.state.todos.filter(todo => todo !== item)
+    });
+  }
+  render() {
+    const makeTodoElements = (item, i) => {
+      const deleter = <span onClick={() => this.deleteTodo(item)}>delete</span>;
+      return <li key={i}>item -- {deleter}</li>;
+    };
+    return (
+      <div>
+        <ul>{this.state.todos.map(makeTodoElements)}</ul>
+        <input onChange={e => this.setState({ text: e.target.value })} />
+        <button onClick={this.addTodo}>submit</button>
+      </div>
+    );
+  }
 }
-</script>
             </code>
           </pre>
         </section>
+
+        <section>
+          <pre>
+            <code>
+// render a TodoList into some container element in the DOM
+ReactDOM.render(
+  React.createElement(TodoList, { initialTodos: ['first', 'second'] }),
+  container
+);
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>React Terminology</h3>
+          <ul>
+            <li>
+              Component: A class extending <code>React.Component</code> or a function that returns a <code>React.Node</code>
+              <pre>
+                <code>
+var Echo = function(props) {
+  return React.createElement('span', props.text);
+}
+                </code>
+              </pre>
+            </li>
+            <li>Props: An object representation of the attributes of a component
+              <pre>
+                <code>&lt;clock attr2={...} attr1={...}&gt; --> props = { attr1: ..., attr2: ... }</code>
+              </pre>
+            </li>
+            <li>State: An object representation of each variable the component keeps track of internally.</li>
+          </ul>
+        </section>
+        <section>
+          <ul>
+            <li>PropTypes: An object representation of the types of each attribute.
+              <pre>
+                <code>
+import React from 'react';
+import PropTypes from 'prop-types';
+class Echo extends React.Component {
+  render() {
+    return &lt;span&gt;{this.props.text}&lt;/span&gt;;
+  }
+}
+Echo.propTypes = { text: PropTypes.string };
+Echo.DefaultProps = { text: '' };
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <ul>
+            <li>
+              Component#setState: A component method that asynchronously merges a object into the components state object.
+              <pre>
+                <code>
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 }
+  }
+  render() {
+    const update = () => {
+      this.setState({ count: this.state.count + 1 });
+    }
+    return &lt;span onClick={update}&gt;{this.state.count}&lt;/span&gt;;
+  }
+}
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+            <h3>Lifecycle methods</h3>
+            <pre>
+              <code>
+class Echo extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // Runs just before an update where the props have changed.
+    // You can call setState here.
+  }
+  componentDidUpdate() {
+    // Runs just after the component is re-rendered with new state or props.
+    // Don't call setState.
+  }
+  componentDidMount() {
+    // Runs after the component has it's DOM components mounted.
+    // Don't call setState.
+  }
+  componentWillUnMount() {
+    // Runs just before the component is about to get removed from the DOM.
+    // Don't call setState.
+  }
+  render() {
+    // Return a virtual DOM node using JSX or using React.createElement.
+    return <span>{this.props.text}</span>;
+  }
+}
+            </code>
+          </pre>
+          <a href="https://reactjs.org/docs/react-component.html">See all life cycle methods here</a>
+        </section>
+
         <section>
           <h3>But why React instead of templating?</h3>
           <p>
@@ -226,16 +372,120 @@ window.onload = function() {
             React gives us a component lifetime to encapsulate operations on DOM nodes created after render.
             This is not suggested but there are situations that can only be solved by DOM operations.
           </p>
+          <p>
+            Example: Drawing onto a <code>canvas</code> element.
+          </p>
         </section>
 
 
         <section>
           <h3>But why React instead of templating?</h3>
           <p>
-            React components are also treated as values. One can <code>return</code> an appriopriate component based
-            on the results of computations or HTTP requests.
+            React components also encapsulate concerns you would typically solve
+            in  three seperate .html, .css and .js files, even in templating languages.
+          </p>
+          <p>
+            Lastly, React components can be rendered on the server and 'hydrated' with client side data
+            on the client. This is by using <code>ReactDOMServer</code> on the server and <code>ReactDOM.hydrate</code> on the client.
           </p>
         </section>
+
+        <section>
+          <h3>Setting up a development environment</h3>
+          <p>
+            As you noticed, React components are written in a syntax not native to browsers.
+            We can use <code>React.createElement</code> and <code>React.createClass</code>
+            to work around this but we end up with a very large amount of code
+            for very simple components.
+          </p>
+          <p>
+            In fact Facebook depraceted the use of <code>React.createClass</code>
+            and now we can only define classes using functions or by extending
+            <code>React.Component</code> or <code>React.PureComponent</code>
+          </p>
+
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<div id="echo-container"></div>
+<script>
+window.onload = function() {
+  const root = document.querySelector('#echo-container');
+  const Clock = function(props) {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'span',
+        null,
+        props.time.toTimeString()
+      )
+    );
+  };
+  function renderClock() {
+    const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
+    ReactDOM.render(clockElement, root);
+    window.requestAnimationFrame(renderClock)
+  }
+  renderClock()
+}
+</script>
+            </code>
+          </pre>
+        </section>
+
+        <section>
+<div id="echo-container"></div>
+<script>
+window.onload = function() {
+  const root = document.querySelector('#echo-container');
+  const Clock = function(props) {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'span',
+        null,
+        props.time.toTimeString()
+      )
+    );
+  };
+  function renderClock() {
+    const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
+    ReactDOM.render(clockElement, root);
+    window.requestAnimationFrame(renderClock)
+  }
+  renderClock()
+}
+</script>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+const Clock = ({ time }) =>
+  <div>
+    <span>{time.toTimeString()}</span>
+  </div>
+;
+function renderClock() {
+  ReactDOM.render(&lt;Clock time={new Date(Date.now())}/&gt;, root);
+  window.requestAnimationFrame(renderClock)
+}
+renderClock()
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3></h3>
+        </section>
+
+        <section>
+        </section>
+
         <!-- Thanks -->
         <section>
           <h2>Thanks!</h2>
