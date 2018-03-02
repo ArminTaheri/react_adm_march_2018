@@ -112,10 +112,10 @@
           </p>
           <p>
             The browser then recuisively dispatches rendering subroutines down this tree
-            of UI element descriptions. CSS offers styling context orthogonally.
+            of UI element descriptions. CSS offers styling context on the side.
           </p>
           <p>
-            All of this is abstracted away from you when you write your HTML and event handlers.
+            All of this is abstracted away from you when you write your HTML, CSS, and Javascript event handlers.
           </p>
         </section>
 
@@ -151,7 +151,7 @@
             Facebook made this possible in React by using a virtual DOM.
           </p>
           <p>
-            Many front end frameworks encode components as objects in javascript.
+            Many front end frameworks encode UI elements as objects in javascript.
             There is usually a templating language that encodes the structure
             of a subtree of the virtual DOM. The virtual DOM itself quickly
             helps determine what real DOM elements to update remove or add to the
@@ -163,9 +163,9 @@
           <h3>DOM vs. Virtual DOM</h3>
           <p>
             All we have to do as developers is define what our particular
-            component looks like as a virtual DOM node. We can define our component
-            in terms of other components and get more complex sub structures
-            in our virtual DOM.
+            component looks like as a virtual DOM node. This will be a <code> React.NODE</code>.
+            in React. We can define our component in terms of other components
+            and get more complex sub structures in our virtual DOM.
           </p>
         </section>
 
@@ -241,7 +241,7 @@ class TodoList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { todos: props.initialTodos };
-    // Bind component methods' `this` to the component itself for use as event handlers;
+    // We want to use component methods as event handlers so we bind the component itself as context.
     this.addTodo = this.addTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
     this.readInputText = this.readInputText.bind(this);
@@ -262,15 +262,15 @@ class TodoList extends React.Component {
   }
   render() {
     const makeTodoElements = (item, i) => {
-      const deleter = <span onClick={() => this.deleteTodo(item)}>delete</span>;
-      return <li key={i}>item -- {deleter}</li>;
+      const deleter = &lt;span onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/span&gt;;
+      return &lt;li key={i}&gt;item -- {deleter}&lt;/li&gt;;
     };
     return (
-      <div>
-        <ul>{this.state.todos.map(makeTodoElements)}</ul>
-        <input onChange={e => this.readInputText(e.target.value)} />
-        <button onClick={this.addTodo}>submit</button>
-      </div>
+      &lt;div&gt;
+        &lt;ul&gt;{this.state.todos.map(makeTodoElements)}&lt;/ul&gt;
+        &lt;input onChange={e =&gt; this.readInputText(e.target.value)} /&gt;
+        &lt;button onClick={this.addTodo}&gt;submit&lt;/button&gt;
+      &lt;/div&gt;
     );
   }
 }
@@ -432,6 +432,23 @@ class Echo extends React.Component {
         <section>
           <pre>
             <code>
+const Clock = props =>
+  <div>
+    <span>{props.time.toTimeString()}</span>
+  </div>
+;
+function renderClock() {
+  ReactDOM.render(&lt;Clock time={new Date(Date.now())}/&gt;, root);
+  setTimeout(renderClock, 500);
+}
+renderClock()
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
 <div id="echo-container"></div>
 <script>
 window.addEventListener('load', function() {
@@ -450,7 +467,7 @@ window.addEventListener('load', function() {
   function renderClock() {
     const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
     ReactDOM.render(clockElement, root);
-    window.requestAnimationFrame(renderClock);
+    setTimeout(renderClock, 500);
   }
   renderClock();
 });
@@ -458,6 +475,7 @@ window.addEventListener('load', function() {
             </code>
           </pre>
         </section>
+
 
         <section>
 <div id="echo-container"></div>
@@ -486,18 +504,38 @@ window.addEventListener('load', function() {
         </section>
 
         <section>
+          <h3>Webpack and JSX</h3>
+          <p>Let's look at a minimal setup for using JSX and ES6.</p>
           <pre>
             <code>
-const Clock = ({ time }) =>
-  <div>
-    <span>{time.toTimeString()}</span>
-  </div>
-;
-function renderClock() {
-  ReactDOM.render(&lt;Clock time={new Date(Date.now())}/&gt;, root);
-  window.requestAnimationFrame(renderClock)
-}
-renderClock()
+// project/src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = 'My Minimal React Webpack Babel Setup';
+
+ReactDOM.render(
+  <div>{title}</div>,
+  document.getElementById('app')
+);
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<!-- project/index.html -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+      &lt;title>The Minimal React Webpack Babel Setup&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app">&lt;/div&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
             </code>
           </pre>
         </section>
@@ -533,45 +571,6 @@ module.exports = {
 };
             </code>
           </pre>
-        </section>
-
-        <section>
-          <h3>Webpack and JSX</h3>
-          <pre>
-            <code>
-<!-- project/index.html -->
-&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-  &lt;head&gt;
-      &lt;title>The Minimal React Webpack Babel Setup&lt;/title&gt;
-  &lt;/head&gt;
-  &lt;body&gt;
-    &lt;div id="app">&lt;/div&gt;
-    &lt;script src="bundle.js"&gt;&lt;/script&gt;
-  &lt;/body&gt;
-&lt;/html&gt;
-            </code>
-          </pre>
-        </section>
-
-        <section>
-          <pre>
-            <code>
-// project/src/index.js
-import React from 'react';
-import ReactDOM from 'react-dom';
-
-const title = 'My Minimal React Webpack Babel Setup';
-
-ReactDOM.render(
-  <div>{title}</div>,
-  document.getElementById('app')
-);
-            </code>
-          </pre>
-          <a src="https://www.robinwieruch.de/minimal-react-webpack-babel-setup/">
-            See this blog page for the full instructions
-          </a>
         </section>
 
         <section>
@@ -659,7 +658,15 @@ function method(value: { prop?: string }) {
           <div><a href="https://nuclide.io/">https://nuclide.io/</a></div>
           <img width="600px" src="static/atom-ide-ui.png" />
         </section>
-
+        <section>
+          <h2>Next Time</h2>
+          <ul>
+            <li>Review and questions</li>
+            <li>Setting up a Node environment</li>
+            <li>React and Flow types</li>
+            <li>Facebook's Flow architecture and state management</li>
+          <ul>
+        </section>
         <!-- Thanks -->
         <section>
           <h2>Thanks!</h2>
