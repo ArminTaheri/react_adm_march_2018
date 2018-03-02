@@ -151,7 +151,7 @@
             Facebook made this possible in React by using a virtual DOM.
           </p>
           <p>
-            Many front end frameworks encode components as objects in javascript.
+            Many front end frameworks encode UI elements as objects in javascript.
             There is usually a templating language that encodes the structure
             of a subtree of the virtual DOM. The virtual DOM itself quickly
             helps determine what real DOM elements to update remove or add to the
@@ -262,15 +262,15 @@ class TodoList extends React.Component {
   }
   render() {
     const makeTodoElements = (item, i) => {
-      const deleter = <span onClick={() => this.deleteTodo(item)}>delete</span>;
-      return <li key={i}>item -- {deleter}</li>;
+      const deleter = &lt;span onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/span&gt;;
+      return &lt;li key={i}&gt;item -- {deleter}&lt;/li&gt;;
     };
     return (
-      <div>
-        <ul>{this.state.todos.map(makeTodoElements)}</ul>
-        <input onChange={e => this.readInputText(e.target.value)} />
-        <button onClick={this.addTodo}>submit</button>
-      </div>
+      &lt;div&gt;
+        &lt;ul&gt;{this.state.todos.map(makeTodoElements)}&lt;/ul&gt;
+        &lt;input onChange={e =&gt; this.readInputText(e.target.value)} /&gt;
+        &lt;button onClick={this.addTodo}&gt;submit&lt;/button&gt;
+      &lt;/div&gt;
     );
   }
 }
