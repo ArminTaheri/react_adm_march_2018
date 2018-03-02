@@ -524,7 +524,7 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env']
+            presets: ['env', 'react']
           }
         }
       }
@@ -620,6 +620,29 @@ function method(value: { prop?: string }) {
     otherMethod();
     // $ExpectError
     value.prop.charAt(0);
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+// @flow
+var obj = { prop: "test" };
+
+function otherMethod() {
+  if (Math.random() > 0.5) {
+    delete obj.prop;
+  }
+}
+
+function method(value: { prop?: string }) {
+  if (value.prop) {
+    const prop = value.prop; // store the prop
+    otherMethod();
+    prop.charAt(0); // good to go!
   }
 }
             </code>
