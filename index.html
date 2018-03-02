@@ -47,6 +47,10 @@
 
         <!-- 1st slide-->
         <section>
+          <h1>React 101</h1>
+        </section>
+
+        <section>
           <h3>Table of Contents</h3>
           <ul>
             <li>Motivation</li>
@@ -77,9 +81,9 @@
         <section>
           <h3>Motivation</h3>
           <p>
-            Documents now have videos, at some point Java applets, and now with HTML5,
+            Documents now have videos, at some point had Java applets, and now have
             virtually anything you can think of that would typically be in a
-            desktop application.
+            desktop application thanks to the additions of the HTML5 standard.
           </p>
           <p>
             Even mobile applications and VR applications are moving away from
@@ -93,7 +97,7 @@
           <p>
             Clearly, then, we need to strive for the best way to describe a particular
             set of interactions on a web page given all the possibilities.
-            I hope to show that react is one of the best ways to do this.
+            I hope to show that react is among the best ways to do this.
           </p>
         </section>
 
@@ -103,9 +107,12 @@
             Before talking about React, one must introduce the Document Object Model (DOM).
           </p>
           <p>
-            The DOM is an abstract representation of the state of the web page in the browser.
-            The DOM is traversed by recursively dispatched subroutines in the browser for each type of encountered element.
-            What you are left with is not only the rendered web page, but also a queryable structure to intersect screen positions with your element boxes.
+            The DOM is an abstract representation of the UI elements contained on a web page.
+            The DOM is encoded as HTML in a tree structure that can be intuitively parsed into memory.
+          </p>
+          <p>
+            The browser then recuisively dispatches rendering subroutines down this tree
+            of UI element descriptions. CSS offers styling context orthogonally.
           </p>
           <p>
             All of this is abstracted away from you when you write your HTML and event handlers.
@@ -144,9 +151,11 @@
             Facebook made this possible in React by using a virtual DOM.
           </p>
           <p>
-            A virtual DOM is lightweight representation of the DOM itself that can heuristically be compared with other virtual DOMS.
-            Facebook is always optimising how to find the most efficient ways to take two virtual DOMS and find the minimal set of operations
-            to move from one to the other given the current structure of the DOM.
+            Many front end frameworks encode components as objects in javascript.
+            There is usually a templating language that encodes the structure
+            of a subtree of the virtual DOM. The virtual DOM itself quickly
+            helps determine what real DOM elements to update remove or add to the
+            viewing document.
           </p>
         </section>
 
@@ -163,55 +172,64 @@
         <section>
           <pre>
             <code>
-<ul id='todo-list1'></ul>
-<input id='input1' type='text' />
-<button id='submit1'>submit</button>
-<script>
-window.onload = function() {
+<div style="display: flex; margin-left: 30%; justify-content: center; flex-direction: column; width: 300px;">
+  <ul id='todo-list1'></ul> <!-- The todo list -->
+  <input id='input1' type='text' /> <!-- The todo input -->
+  <button id='submit1'>submit</button> <!-- The form submit button -->
+</div>
+&lt;script&gt;
+window.addEventListener('load', function() {
+  // query the elements out of the DOM
   var todoList = document.querySelector('#todo-list1');
   var input = document.querySelector('#input1');
   var button = document.querySelector('#submit1');
+  // Handle the submit button click by adding an <li>{text}</li> DOM node
   button.addEventListener('click', function() {
     var child = document.createElement('li')
-    var deleter = document.createElement('span');
+    var deleter = document.createElement('span'); // Clickable delete button
     deleter.innerHTML=' -- delete';
     child.innerHTML=input.value;
+    input.value='';
     child.appendChild(deleter);
     todoList.appendChild(child);
+    // Handle delete button clicking
     deleter.addEventListener('click', function() {
       todoList.removeChild(child);
     });
   })
-}
-</script>
+})
+&lt;/script&gt;
             </code>
           </pre>
         </section>
 
         <section>
 <div style="display: flex; margin-left: 30%; justify-content: center; flex-direction: column; width: 300px;">
-  <ul id='todo-list1'></ul>
-  <input id='input1' type='text' />
-  <button id='submit1'>submit</button>
+  <ul id='todo-list1'></ul> <!-- The todo list -->
+  <input id='input1' type='text' /> <!-- The todo input -->
+  <button id='submit1'>submit</button> <!-- The form submit button -->
 </div>
 <script>
-window.onload = function() {
+window.addEventListener('load', function() {
+  // query the elements out of the DOM
   var todoList = document.querySelector('#todo-list1');
   var input = document.querySelector('#input1');
   var button = document.querySelector('#submit1');
+  // Handle the submit button click by adding an <li>{text}</li> DOM node
   button.addEventListener('click', function() {
     var child = document.createElement('li')
-    var deleter = document.createElement('span');
+    var deleter = document.createElement('span'); // Clickable delete button
     deleter.innerHTML=' -- delete';
     child.innerHTML=input.value;
     input.value='';
     child.appendChild(deleter);
     todoList.appendChild(child);
+    // Handle delete button clicking
     deleter.addEventListener('click', function() {
       todoList.removeChild(child);
     });
   })
-}
+});
 </script>
         </section>
 
@@ -223,8 +241,10 @@ class TodoList extends React.Component {
   constructor(props) {
     super(props);
     this.state = { todos: props.initialTodos };
+    // Bind component methods' `this` to the component itself for use as event handlers;
     this.addTodo = this.addTodo.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.readInputText = this.readInputText.bind(this);
   }
   addTodo() {
     this.setState({
@@ -237,6 +257,9 @@ class TodoList extends React.Component {
       todos: this.state.todos.filter(todo => todo !== item)
     });
   }
+  readInputText(text) {
+    this.setState({ text: text });
+  }
   render() {
     const makeTodoElements = (item, i) => {
       const deleter = <span onClick={() => this.deleteTodo(item)}>delete</span>;
@@ -245,7 +268,7 @@ class TodoList extends React.Component {
     return (
       <div>
         <ul>{this.state.todos.map(makeTodoElements)}</ul>
-        <input onChange={e => this.setState({ text: e.target.value })} />
+        <input onChange={e => this.readInputText(e.target.value)} />
         <button onClick={this.addTodo}>submit</button>
       </div>
     );
@@ -260,7 +283,7 @@ class TodoList extends React.Component {
             <code>
 // render a TodoList into some container element in the DOM
 ReactDOM.render(
-  React.createElement(TodoList, { initialTodos: ['first', 'second'] }),
+  &lt;TodoList initialtodos={['first', 'second']}&gt;,
   container
 );
             </code>
@@ -391,7 +414,7 @@ class Echo extends React.Component {
         </section>
 
         <section>
-          <h3>Setting up a development environment</h3>
+          <h3>Webpack and JSX</h3>
           <p>
             As you noticed, React components are written in a syntax not native to browsers.
             We can use <code>React.createElement</code> and <code>React.createClass</code>
@@ -411,8 +434,7 @@ class Echo extends React.Component {
             <code>
 <div id="echo-container"></div>
 <script>
-window.onload = function() {
-  const root = document.querySelector('#echo-container');
+window.addEventListener('load', function() {
   const Clock = function(props) {
     return React.createElement(
       'div',
@@ -424,13 +446,14 @@ window.onload = function() {
       )
     );
   };
+  const root = document.querySelector('#echo-container');
   function renderClock() {
     const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
     ReactDOM.render(clockElement, root);
-    window.requestAnimationFrame(renderClock)
+    window.requestAnimationFrame(renderClock);
   }
-  renderClock()
-}
+  renderClock();
+});
 </script>
             </code>
           </pre>
@@ -439,7 +462,7 @@ window.onload = function() {
         <section>
 <div id="echo-container"></div>
 <script>
-window.onload = function() {
+window.addEventListener('load', function() {
   const root = document.querySelector('#echo-container');
   const Clock = function(props) {
     return React.createElement(
@@ -458,7 +481,7 @@ window.onload = function() {
     window.requestAnimationFrame(renderClock)
   }
   renderClock()
-}
+})
 </script>
         </section>
 
@@ -480,10 +503,161 @@ renderClock()
         </section>
 
         <section>
-          <h3></h3>
+          <h3>Webpack and JSX</h3>
+          <pre>
+            <code>
+// project/webpack.config.js
+module.exports = {
+  entry: [
+    './src/index.js'
+  ],
+  output: {
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'react']
+          }
+        }
+      }
+    ]
+  }
+};
+            </code>
+          </pre>
         </section>
 
         <section>
+          <h3>Webpack and JSX</h3>
+          <pre>
+            <code>
+<!-- project/index.html -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+      &lt;title>The Minimal React Webpack Babel Setup&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app">&lt;/div&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+// project/src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = 'My Minimal React Webpack Babel Setup';
+
+ReactDOM.render(
+  <div>{title}</div>,
+  document.getElementById('app')
+);
+            </code>
+          </pre>
+          <a src="https://www.robinwieruch.de/minimal-react-webpack-babel-setup/">
+            See this blog page for the full instructions
+          </a>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            The last but important part of any software system is defining how
+            components should compose. In React we have PropTypes.
+          </p>
+          <pre>
+            <code>
+Echo.propTypes = { text: PropTypes.string };
+            </code>
+          </pre>
+          <p> This gives us run time type checking. But by then it's too late!</p>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            Flow types is an npm hosted tool that optionally typechecks javascript
+            files annoted with a <code>// @flow</code> at line 0 of the file.
+          </p>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            This forces us to ensure a variable has a specefic type. This means during
+            code review you actually have to justify making a particular function argument
+            nullable.
+          </p>
+          <a href="https://flow.org/en/docs/getting-started/">https://flow.org/en/docs/getting-started/</a>
+          <pre>
+            <code>
+// @flow
+var obj = { prop: "test" };
+
+function otherMethod() {
+  if (Math.random() > 0.5) {
+    delete obj.prop;
+  }
+}
+
+function method(value: { prop?: string }) {
+  if (value.prop) {
+    otherMethod();
+    // $ExpectError
+    value.prop.charAt(0);
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+// @flow
+var obj = { prop: "test" };
+
+function otherMethod() {
+  if (Math.random() > 0.5) {
+    delete obj.prop;
+  }
+}
+
+function method(value: { prop?: string }) {
+  if (value.prop) {
+    const prop = value.prop; // store the prop
+    otherMethod();
+    prop.charAt(0); // good to go!
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Nuclide</h3>
+          <p>
+            A helpful editor plugin for Atom let's us see flow type errors
+            and eslint errors on the fly. This gives a very solid developer
+            experience for free.
+          </p>
+          <div><a href="https://nuclide.io/">https://nuclide.io/</a></div>
+          <img width="600px" src="static/atom-ide-ui.png" />
         </section>
 
         <!-- Thanks -->
