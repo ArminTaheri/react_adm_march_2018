@@ -231,7 +231,7 @@ class Counter extends React.Component {
     this.state = { count: 0 }
   }
   render() {
-    const update = () => {
+    const update = () =&gt; {
       this.setState({ count: this.state.count + 1 });
     }
     return &lt;span onClick={update}&gt;{this.state.count}&lt;/span&gt;;
@@ -596,10 +596,10 @@ To create a production build, use npm run build.
           <h3>Using Create React App</h3>
           <pre>
           <code>
-import React, {Component} from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
-class TodoList extends React.Component {
+class TodoList extends Component {
   constructor(props) {
     super(props);
     this.state = { todos: props.initialTodos };
@@ -624,8 +624,8 @@ class TodoList extends React.Component {
   }
   render() {
     const makeTodoElements = (item, i) =&gt; {
-      const deleter = &lt;span onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/span&gt;;
-      return &lt;li key={i}&gt;item -- {deleter}&lt;/li&gt;;
+      const deleter = &lt;button onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/button&gt;;
+      return &lt;li key={i}&gt;{item} -- {deleter}&lt;/li&gt;;
     };
     return (
       &lt;div&gt;
@@ -643,7 +643,7 @@ ReactDOM.render(&lt;TodoList initialTodos={[]} /&gt;, document.querySelector("#r
         </section>
 
         <section>
-          Example here
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/todolist">TodoList Example</a>
         </section>
 
         <section>
@@ -710,13 +710,161 @@ ReactDOM.render(&lt;TodoList initialTodos={[]} /&gt;, document.querySelector("#r
         </section>
 
         <section>
+          <h3>React Quill</h3>
+          <p>We can use react-quill as a presentational component to keep track of user-edited rich text as HTML</p>
+          <pre>
+            <code>
+$ npm install --save react-quill js-beautify
+            </code>
+          </pre>
+        </section>
+
+        <section>
           <h3>Presentational Components</h3>
-          react-quil example
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/editor">Editor Example</a>
+        </section>
+
+        <section>
+          <h3>Presentational Components</h3>
+          <pre>
+            <code>
+import React, { Component } from "react";
+import ReactQuill from "react-quill";
+import { html } from "js-beautify";
+import "react-quill/dist/quill.snow.css";
+
+class Editor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { markup: "" };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(value) {
+    this.setState({ markup: value });
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;ReactQuill
+          theme="snow"
+          value={this.state.markup}
+          onChange={this.handleChange}
+        /&gt;
+        &lt;div&gt;
+          &lt;pre&gt;
+            &lt;code&gt;{html(this.state.markup)}&lt;/code&gt;
+          &lt;/pre&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+            </code>
+          </pre>
         </section>
 
         <section>
           <h3>Container Components</h3>
-          react-final-form example
+          <p>
+            Going in the other direction, We can use react-final-form as a container component
+            to keep track of validation and submissions of forms.
+          </p>
+          <pre>
+            <code>
+$ npm install --save react-final-form final-form
+            </code>
+          </pre>
+        </section>
+
+
+        <section>
+          <h3>Container Components</h3>
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/form">Form Example</a>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+import React from "react";
+import { Form, Field } from "react-final-form";
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+const onSubmit = form => alert(JSON.stringify(form, null, 2));
+
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const validate = form => {
+  return timeout(300).then(() => {
+    if (!form.phone) {
+      return { phone: "Required" };
+    }
+    if (!form.phone.match(/[(]?[0-9]{3}[)]?[-]?[0-9]{3}[-]?[0-9]{4,6}$/im)) {
+      return { phone: "Inavlid phone number" };
+    }
+    return {};
+  });
+};
+            </code>
+          </pre>
+        </section>
+        
+        <section>
+          <pre>
+            <code>
+const ExampleForm = () =&gt; (
+  &lt;Form
+    onSubmit={onSubmit}
+    validate={validate}
+    render={({ handleSubmit, pristine, invalid }) =&gt; (
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;div&gt;
+          &lt;label&gt;First Name &lt;/label&gt;
+          &lt;Field name="firstName" component="input" placeholder="First Name" /&gt;
+        &lt;/div&gt;
+
+        &lt;hr /&gt;
+        &lt;Field
+          name="bio"
+          render={({ input, meta }) =&gt; (
+            &lt;div&gt;
+              &lt;labelB&gt;io &lt;/label&gt;
+              &lt;textarea {...input} /&gt;
+              {meta.touched && meta.error && &lt;span{&gt;meta.error}&lt;/span}&gt;
+            &lt;/div&gt;
+          )}
+        /&gt;
+
+        &lt;hr /&gt;
+        &lt;Field name="phone"&gt;
+          {({ input, meta }) =&gt; (
+            &lt;div&gt;
+              &lt;labelP&gt;hone &lt;/label&gt;
+              &lt;input type="text" {...input} placeholder="Phone" /&gt;
+              {meta.touched &&
+                meta.error && (
+                  &lt;span style={{ color: "red" }}{&gt;meta.error}&lt;/span&gt;
+                )}
+            &lt;/div&gt;
+          )}
+        &lt;/Field&gt;
+
+        &lt;hr /&gt;
+        &lt;button type="submit" disabled={pristine || invalid}&gt;
+          Submit
+        &lt;/button&gt;
+      &lt;/form&gt;
+    )}
+  /&gt;
+);
+
+export default ExampleForm;
+            </code>
+          </pre>
         </section>
 
         <section>
