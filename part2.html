@@ -1,0 +1,995 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>React</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="Armin Taheri">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <script src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+
+        <!-- 1st slide-->
+        <section>
+          <h1>React 101</h1>
+        </section>
+
+        <section>
+          <h3>Table of Contents</h3>
+          <ul>
+            <li>Part1 Review</li>
+            <li>React.js Development Environment</li>
+            <li>Using Create React App</li>
+            <li>Presentational vs. Container Components</li>
+            <li>Examples</li>
+            <li>Deploying to github pages</li>
+            <li>Conclusion</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>Why develop for the web?</h3>
+          <p>
+            Users want software to be easy and quick to install.
+            If a user, in the worse case, needs to spend time debugging
+            why a tool won't compile on their system just to manipulate
+            their data they lose time and money and start looking for other options.
+          </p>
+          <p>
+            Users also want to be able to share the results of their
+            work as quickly as possible. Sharing a webpage is far
+            quicker than sharing a desktop application and most devices
+            with a screen support the ability to render HTML5 documents.
+          </p>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>What is the challenge?</h3>
+          <p>
+            Before modern web advancements, web documents really only rendered
+            text, images, and colored rectangles. Videos and more complex graphics
+            were added later. Then with javascript, developers were able
+            to script the web browser to modify the document programmatically.
+          </p>
+          <p>
+            Today we can have a web document render virtually any 2D stream of pixels you can think of
+            from basic 3D graphics, to full feldged games compiled from C++ to javascript. With all this
+            power it becomes a challenge grouping together a collection of rendered features inside a document
+            into consise sub-units of interactibility.
+          </p>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>What do we do?</h3>
+          <p>
+            The truth is there is no all encompassing solution managing the distinct interactions
+            a web developer would like to support in their web application.
+          </p>
+          <p>
+            But for a large set of use cases, one can use a framework that treats interactions
+            as sub-units of state and presentation that evolves by propagating events between each other.
+            In this presentation we will see how React.js can help us build these sub-units.
+          </p>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            The DOM is an abstract representation of the UI elements contained on a web page.
+            The DOM is encoded as HTML in a tree structure that can be intuitively parsed into memory.
+          </p>
+          <p>
+            The browser then recuisively dispatches rendering subroutines down this tree
+            of UI element descriptions. CSS offers styling context on the side.
+          </p>
+          <p>
+            All of this is abstracted away from you when you write your HTML, CSS, and Javascript event handlers.
+          </p>
+        </section>
+        </section>
+
+        <section>
+          <img src="static/pic_htmltree.gif" />
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Many front end frameworks encode UI elements as objects in javascript.
+            There is usually a templating language that encodes the structure
+            of a subtree of the virtual DOM. The virtual DOM itself quickly
+            helps determine what real DOM elements to update remove or add to the
+            viewing document.
+          </p>
+          <p>
+            React components are instantiated as virtual DOM nodes. React takes a tree
+            of virtual DOM nodes and decides how to manipulate the true DOM to get the
+            same visibile document represented by the virtual DOM tree.
+          </p>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Many front end frameworks encode UI elements as objects in javascript.
+            There is usually a templating language that encodes the structure
+            of a subtree of the virtual DOM. The virtual DOM itself quickly
+            helps determine what real DOM elements to update remove or add to the
+            viewing document.
+          </p>
+          <p>
+            React components are instantiated as virtual DOM nodes. React takes a tree
+            of virtual DOM nodes and decides how to manipulate the true DOM to get the
+            same visibile document represented by the virtual DOM tree.
+          </p>
+        </section>
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Manipulating virtual DOM nodes is far more efficient as the browser does not
+            natively try to render text and geometry on a tree of javascript objects. Front end
+            frameworks can reason about how to efficiently modify the true DOM far quicker using
+            tree traversal heuristics.
+          </p>
+        </section>
+
+        <section>
+          <h2>Part 1 Review</h2>
+          <h3>React Terminology</h3>
+          <ul>
+            <li>
+              Component: A class extending <code>React.Component</code> or a function that returns a <code>React.Node</code>
+              <pre>
+                <code>
+var Echo = function(props) {
+  return React.createElement('span', props.text);
+}
+                </code>
+              </pre>
+            </li>
+            <li>Props: An object representation of the attributes of a component
+              <pre>
+                <code>&lt;clock attr2={...} attr1={...}&gt; --> props = { attr1: ..., attr2: ... }</code>
+              </pre>
+            </li>
+            <li>State: An object representation of each variable the component keeps track of internally.</li>
+          </ul>
+        </section>
+
+        <section>
+          <ul>
+            <li>PropTypes: An object representation of the types of each attribute.
+              <pre>
+                <code>
+import React from 'react';
+import PropTypes from 'prop-types';
+class Echo extends React.Component {
+  render() {
+    return &lt;span&gt;{this.props.text}&lt;/span&gt;;
+  }
+}
+Echo.propTypes = { text: PropTypes.string };
+Echo.DefaultProps = { text: '' };
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <ul>
+            <li>
+              Component#setState: A component method that asynchronously merges a object into the components state object.
+              <pre>
+                <code>
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 }
+  }
+  render() {
+    const update = () =&gt; {
+      this.setState({ count: this.state.count + 1 });
+    }
+    return &lt;span onClick={update}&gt;{this.state.count}&lt;/span&gt;;
+  }
+}
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+            <h3>Lifecycle methods</h3>
+            <pre>
+              <code>
+class Echo extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // Runs just before an update where the props have changed.
+    // You can call setState here.
+  }
+  componentDidUpdate() {
+    // Runs just after the component is re-rendered with new state or props.
+    // Don't call setState.
+  }
+  componentDidMount() {
+    // Runs after the component has it's DOM components mounted.
+    // Don't call setState.
+  }
+  componentWillUnMount() {
+    // Runs just before the component is about to get removed from the DOM.
+    // Don't call setState.
+  }
+  render() {
+    // Return a virtual DOM node using JSX or using React.createElement.
+    return <span>{this.props.text}</span>;
+  }
+}
+            </code>
+          </pre>
+          <a href="https://reactjs.org/docs/react-component.html">See all life cycle methods here</a>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            The quickest way to start with react is to create an HTML file, load the React and ReactDOM
+            javascript files, and use `React.createElement` to build up a virtual DOM tree.
+            In version 16 of React, `ReactDOM.render` can take a function that returns a virtual DOM tree
+            and render that virtual DOM tree into the true DOM.
+          </p>
+        </section>
+
+        <section>
+          <h3>Example:</h3>
+              <pre>
+                <code>
+&lt;!DOCTYPE HTML&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;script src="https://unpkg.com/react@16/umd/react.development.js"&gt;&lt;/script>&gt;
+    &lt;script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"&gt;&lt;/script>&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="root"&gt;&lt;/div&gt;
+    &lt;script&gt;
+      var Echo = function(props) {
+        return React.createElement("span", props.text);
+      }
+      ReactDOM.render(
+        React.createElement(Echo, { text: "hello world" }),
+        document.querySelector("#root")
+      );
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+                </code>
+              </pre>
+        </section>
+
+        <section>
+          <div id="root"></div>
+          <script>
+            window.addEventListener("load", function () {
+              var Echo = function(props) {
+                return React.createElement("span", {}, props.text);
+              }
+              ReactDOM.render(
+                React.createElement(Echo, { text: "hello world!" }),
+                document.querySelector("#root")
+              );
+            })
+          </script>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            Unfortunately this makes your components very ugly very fast. We would much rather
+            use the HTML markup syntax we're used to when building up React components.
+          </p>
+          <p>
+            To do this we need to transpile ES6 and JSX into this ugly looking code so that all browsers
+            can execute it inside an HTML document. The first step is to install Nodejs.
+          </p>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <ul>
+            <li>Visit <a href="https://nodejs.org/en/download/">https://nodejs.org/en/download/</a>.</li>
+            <li>Find your operating system's set of binaries.</li>
+            <li>Extract the files.</li>
+            <li>Add the <code>bin</code> folder among the extracted files to your <code>$PATH</code> environment variable.</li>
+            <li>Run <code>node --version</code> and <code>npm --version</code> to check the versions of node and npm respectively.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            With both Nodejs and it's package manager, npm, installed, we are now able to
+            create a Javascript project and install all of it's dependencies easily. The simplest
+            way to initialize a Javascript project with Nodejs is to run:
+          </p>
+          <code>npm init</code>
+          <p>
+            inside the project folder and follow the steps shown.
+          </p>
+        </section>
+
+        <section>
+          <pre>
+          <code class="nohighlight">
+$ mkdir my-js-project
+$ cd my-js-project/
+$ npm init
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+          <code class="nohighlight">
+This utility will walk you through creating a package.json file.
+It only covers the most common items, and tries to guess sensible defaults.
+See `npm help json` for definitive documentation on these fields
+and exactly what they do.
+Use `npm install &lt;pkg&gt; --save` afterwards to install a package and
+save it as a dependency in the package.json file.
+Press ^C at any time to quit.
+name: (my-js-project) 
+version: (1.0.0) 
+description: Example JS project
+entry point: (index.js) src/index.js
+test command: 
+git repository: 
+keywords: 
+author: Armin
+license: (ISC) MIT
+About to write to /home/users/ataheri/repos/misc/my-js-project/package.json:
+{
+  "name": "my-js-project",
+  "version": "1.0.0",
+  "description": "Example JS project",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Armin",
+  "license": "MIT"
+}
+Is this ok? (yes) yes
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+          <code class="nohighlight">
+$ ls
+package.json
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            In order to transpile our ES6 and JSX syntax to a syntax that can be interpretted by the browser,
+            namely ES5, we need to use webpack and a couple of plugins for webpack called loaders. NPM lets us
+            do this easily.
+          </p>
+        </section>
+
+        <section>
+          <pre>
+          <code class="nohighlight">
+$ npm install --save-dev webpack webpack-dev-server webpack-cli
+$ npm install --save-dev babel-core babel-loader babel-preset-env babel-preset-react
+$ npm install --save react react-dom
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Webpack</h3>
+          <ul>
+            <li>webpack is a common runtime for running build tasks on source files or content files.</li>
+            <li>webpack-dev-server is a helper for watching changes as you develop.</li>
+            <li>webpack-cli command line interface to invoke the webpack runtime.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Babel</h3>
+          <ul>
+            <li>babel-core is the core transpiler toolchain for transforming most languages and ES syntax extensions that target ES5.</li>
+            <li>babel-loader is the webpack plugin that is invoked by webpack on imported JSX files in the source code.</li>
+          <ul>
+        </section>
+
+        <section>
+          <h3>Babel presets</h3>
+          <p>
+            Babel presets are essentially language extensions on the base ES5 syntax for javascript.
+          </p>
+          <ul>
+            <li>babel-preset-env extends ES5 with the ES6 and recently ES7 syntax standards for javascript.</li>
+            <li>babel-preset-react further extends the syntax for JSX markup.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            The last steps to our project are to define a webpack configuration and a babel configuration.
+            We define two new files:
+          </p>
+          <ul>
+            <li><code>.babelrc</code></li>
+            <li><code>webpack.config.js</code></li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>.babelrc</h3>
+          <pre>
+          <code>
+{
+  "presets": [
+    "env",
+    "react",
+  ]
+}
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>webpack.config.js</h3>
+          <pre>
+          <code>
+module.exports = {
+  entry: [ // src/index.js will be the entry point when compiling the ES5 bundle.js
+    __dirname + '/src/index.js'
+  ],
+  module: {
+    rules: [
+      { // Use babel-loader for .js and .jsx files 
+        test: /\.(js|jsx)$/,
+        //Exclude anything maching the regex /node_modules/
+        exclude: /node_modules/,
+        use: ['babel-loader']
+      }
+    ]
+  },
+  resolve: {
+    // Can import XYZ.js or XYZ.jsx simply as import XYZ from "XYZ"
+    extensions: ['*', '.js', '.jsx']
+  },
+  output: {
+    // Output the bundle to the "dist/" folder in the root of the project.
+    path: __dirname + '/dist', 
+    // Where our index.html will be for the app.
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
+  devServer: { // Serve the watching dev-server's content from the dist folder
+    contentBase: __dirname + '/dist'
+  }
+};
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>React.js Development Environment</h3>
+          <p>
+            We now add npm tasks to run our development server and build our source files and we are
+            ready to code. Notice we can refer to locally installed executables in npm tasks.
+          </p>
+          <pre>
+          <code>
+{
+  "name": "my-js-project",
+  "version": "1.0.0",
+  "description": "Example JS project",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "webpack-dev-server --config ./webpack.config.js --mode development",
+    "build": "webpack --config ./webpack.config.js"
+  },
+  "author": "Armin",
+  "license": "MIT"
+}
+          </code>
+          </pre>
+        </section>
+        <section>
+          <h3>Using Create React App</h3>
+          <p>
+            But no sane human would want to write all this boilerplate just to initialize a react codebase.
+            Facebook helps us with their utility <code>create-react-app</code> which generates a project
+            structure and hides all the webback and babel configuration in the <code>node_modules/react-scripts</code> directory.
+          </p>
+        </section>
+
+        <section>
+          <h3>Using Create React App</h3>
+          <pre>
+          <code class="nohighlight">
+$ # Installs the npm module into your system's node install directory
+$ npm install --global create-react-app 
+$ create-react-app my-react-project
+$ cd my-react-project
+
+Creating a new React app in /home/myname/my-react-project
+
+...
+
+$ npm run start
+Compiled successfully!
+
+You can now view my-react-project in the browser.
+
+  Local:            http://localhost:3000/
+  On Your Network:  http://10.35.11.4:3000/
+
+Note that the development build is not optimized.
+To create a production build, use npm run build.
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Using Create React App</h3>
+          <p>Let's use our todolist example from part 1 in our new react project</p>
+          <p>We start by editing <code>src/index.js</code></p>
+        </section>
+
+        <section>
+          <h3>Using Create React App</h3>
+          <pre>
+          <code>
+import React, { Component } from "react";
+import ReactDOM from "react-dom";
+
+class TodoList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { todos: props.initialTodos };
+    // We want to use component methods as event handlers so we bind the component itself as context.
+    this.addTodo = this.addTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.readInputText = this.readInputText.bind(this);
+  }
+  addTodo() {
+    this.setState({
+      text: "",
+      todos: this.state.todos.concat([this.state.text])
+    });
+  }
+  deleteTodo(item) {
+    this.setState({
+      todos: this.state.todos.filter(todo =&gt; todo !== item)
+    });
+  }
+  readInputText(text) {
+    this.setState({ text: text });
+  }
+  render() {
+    const makeTodoElements = (item, i) =&gt; {
+      const deleter = &lt;button onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/button&gt;;
+      return &lt;li key={i}&gt;{item} -- {deleter}&lt;/li&gt;;
+    };
+    return (
+      &lt;div&gt;
+        &lt;ul&gt;{this.state.todos.map(makeTodoElements)}&lt;/ul&gt;
+        &lt;input onChange={e =&gt; this.readInputText(e.target.value)} /&gt;
+        &lt;button onClick={this.addTodo}&gt;submit&lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+
+ReactDOM.render(&lt;TodoList initialTodos={[]} /&gt;, document.querySelector("#root"))
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/todolist">TodoList Example</a>
+        </section>
+
+        <section>
+          <h3>Digging Into React Patterns</h3>
+          <p>
+            Now that we can easily setup react projects, let's talk about
+            ways we can also make development of React components easier.
+          </p>
+          <p>
+            The "easyness" of a React component can be measured inversely by the amount of
+            internal knowledge someone needs to know to use that react component. Open source
+            react libraries typically score very high in easyness as their documentation
+            only describes the React properties you must pass which are mostly
+            external to the actual component.
+          </p>
+          <p>
+            We will look at two categories of ideal components in this presentation.
+          </p>
+        </section>
+
+        <section>
+          <h3>Presentational vs. Container Components</h3>
+          <p>
+            When talking about some interaction on a web document, we can easily ask two questions:
+          </p>
+          <ul>
+            <li>What does it do?</li>
+            <li>What does it look like?</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Presentational Components</h3>
+          <ul>
+            <li>Are concerned with how things look.</li>
+            <li>May contain both presentational and container components inside, and usually have some DOM markup and styles of their own.</li>
+            <li>Have no dependencies on the rest of the app.</li>
+            <li>Don’t specify how the data is loaded or mutated.</li>
+            <li>Receive data and callbacks exclusively via props.</li>
+            <li>Rarely have their own state (when they do, it’s UI state rather than data).</li>
+            <li>Are written as functional components unless they need state, lifecycle hooks, or performance optimizations.</li>
+            <li>Examples: Page, Sidebar, List.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Container Components</h3>
+          <ul>
+            <li>Are concerned with how things work.</li>
+            <li>May contain both presentational and container components inside but usually don’t have any DOM markup of their own except for some wrapping divs, and never have any styles.</li>
+            <li>Provide the data and behavior to presentational or other container components.</li>
+            <li>Call state updaters  and provide these as callbacks to the presentational components.</li>
+            <li>Are often stateful, as they tend to serve as data sources.</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Presentational Components</h3>
+          <p>
+            Presentational components are almost always contained in container
+            components or other bridging parent presentational components
+            contained in a container component.
+          </p>
+        </section>
+
+        <section>
+          <h3>React Quill</h3>
+          <p>We can use react-quill as a presentational component to keep track of user-edited rich text as HTML</p>
+          <pre>
+            <code>
+$ npm install --save react-quill js-beautify
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Presentational Components</h3>
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/editor">Editor Example</a>
+        </section>
+
+        <section>
+          <h3>Presentational Components</h3>
+          <pre>
+            <code>
+import React, { Component } from "react";
+import ReactQuill from "react-quill";
+import { html } from "js-beautify";
+import "react-quill/dist/quill.snow.css";
+
+class Editor extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { markup: "" };
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(value) {
+    this.setState({ markup: value });
+  }
+  render() {
+    return (
+      &lt;div&gt;
+        &lt;ReactQuill
+          theme="snow"
+          value={this.state.markup}
+          onChange={this.handleChange}
+        /&gt;
+        &lt;div&gt;
+          &lt;pre&gt;
+            &lt;code&gt;{html(this.state.markup)}&lt;/code&gt;
+          &lt;/pre&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Container Components</h3>
+          <p>
+            Going in the other direction, We can use react-final-form as a container component
+            to keep track of validation and submissions of forms.
+          </p>
+          <pre>
+            <code>
+$ npm install --save react-final-form final-form
+            </code>
+          </pre>
+        </section>
+
+
+        <section>
+          <h3>Container Components</h3>
+          <a target="_blank" href="https://armintaheri.github.io/react-adm-example/form">Form Example</a>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+import React from "react";
+import { Form, Field } from "react-final-form";
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+const onSubmit = form => alert(JSON.stringify(form, null, 2));
+
+const timeout = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const validate = form => {
+  return timeout(300).then(() => {
+    if (!form.phone) {
+      return { phone: "Required" };
+    }
+    if (!form.phone.match(/[(]?[0-9]{3}[)]?[-]?[0-9]{3}[-]?[0-9]{4,6}$/im)) {
+      return { phone: "Inavlid phone number" };
+    }
+    return {};
+  });
+};
+            </code>
+          </pre>
+        </section>
+        
+        <section>
+          <pre>
+            <code>
+const ExampleForm = () =&gt; (
+  &lt;Form
+    onSubmit={onSubmit}
+    validate={validate}
+    render={({ handleSubmit, pristine, invalid }) =&gt; (
+      &lt;form onSubmit={handleSubmit}&gt;
+        &lt;div&gt;
+          &lt;label&gt;First Name &lt;/label&gt;
+          &lt;Field name="firstName" component="input" placeholder="First Name" /&gt;
+        &lt;/div&gt;
+
+        &lt;hr /&gt;
+        &lt;Field
+          name="bio"
+          render={({ input, meta }) =&gt; (
+            &lt;div&gt;
+              &lt;labelB&gt;io &lt;/label&gt;
+              &lt;textarea {...input} /&gt;
+              {meta.touched && meta.error && &lt;span{&gt;meta.error}&lt;/span}&gt;
+            &lt;/div&gt;
+          )}
+        /&gt;
+
+        &lt;hr /&gt;
+        &lt;Field name="phone"&gt;
+          {({ input, meta }) =&gt; (
+            &lt;div&gt;
+              &lt;labelP&gt;hone &lt;/label&gt;
+              &lt;input type="text" {...input} placeholder="Phone" /&gt;
+              {meta.touched &&
+                meta.error && (
+                  &lt;span style={{ color: "red" }}{&gt;meta.error}&lt;/span&gt;
+                )}
+            &lt;/div&gt;
+          )}
+        &lt;/Field&gt;
+
+        &lt;hr /&gt;
+        &lt;button type="submit" disabled={pristine || invalid}&gt;
+          Submit
+        &lt;/button&gt;
+      &lt;/form&gt;
+    )}
+  /&gt;
+);
+
+export default ExampleForm;
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Statically Hosting React Applications</h3>
+          <p>
+            One major benefit of react development is the fact that your code transpiles to
+            code that runs in the browser's javascript runtime. The logic
+            is not executed on the server, rather the server just offers
+            the browser an HTML file which requests a javascript bundle from a static
+            content directory on the server.
+          </p>
+        </section>
+
+        <section>
+          <h3>Statically Hosting React Applications</h3>
+          <p>
+            As an example we will look at deploying a React application on Github Pages. The steps are:
+          </p>
+          <ul>
+            <li>Install the <code>gh-pages</code> helper script in the project.</li>
+            <li>Initialize a git repository and setup the origin to a github repository.</li>
+            <li>Add deploy and predeploy npm tasks.</li>
+          </ul>
+        </section>
+
+        <section>
+          <pre>
+          <code class="nohighlight">
+$ npm install --save-dev gh-pages
+$ git init
+$ git remote add origin git@github.com:gituserame/my-react-project.git
+$ git add .
+$ git push -u origin master
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <p>We need to edit package.json to add the deploy and predeploy stages and the homepage we are hosting on.</p>
+          <pre>
+          <code class="nohighlight">
+{
+  "name": "my-react-project",
+  "homepage": "https://gitusername.github.io/my-react-project",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
+  }
+}
+          </code>
+          </pre>
+        </section>
+
+        <section>
+          <p>
+            Now we can easily run our deploy task to push our built bundle to the gh-pages branch of our repository.
+          </p>
+          <pre>
+          <code>
+$ npm run deploy
+...
+
+File sizes after gzip:
+
+  276.21 KB (+1.18 KB)  build/static/js/main.17436d81.js
+  647 B (+37 B)         build/static/css/main.5ef764d9.css
+...
+
+&gt; gh-pages -d build
+
+Published
+          </code>
+          </pre>
+        </section>
+
+        <!-- Thanks -->
+        <section>
+          <h2>Thanks!</h2>
+          <ul>
+            <li><a href="mailto:armin.ytaheri@gmail.com">armin.ytaheri@gmail.com</a></li>
+            <li><a target="_blank" href="http://mcin-cnim.ca/">www.mcin-ncim.ca</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>

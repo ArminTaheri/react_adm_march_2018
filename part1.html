@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+
+    <title>React</title>
+
+    <meta name="description" content="">
+    <meta name="author" content="Armin Taheri">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="lib/css/zenburn.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/16.2.0/umd/react.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.2.0/umd/react-dom.development.js"></script>
+    <!-- Printing and PDF exports -->
+    <script>
+      var link = document.createElement( 'link' );
+      link.rel = 'stylesheet';
+      link.type = 'text/css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+      document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div class="reveal">
+
+      <!-- Any section element inside of this container is displayed as a slide -->
+      <div class="slides">
+
+
+        <!-- 1st slide-->
+        <section>
+          <h1>React 101</h1>
+        </section>
+
+        <section>
+          <h3>Table of Contents</h3>
+          <ul>
+            <li>Motivation</li>
+            <li>DOM vs. Virtual DOM</li>
+            <li>React Terminology</li>
+            <li>Webpack Presets and JSX</li>
+            <li>Flow Types</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Motivation</h3>
+          <p>
+            The web is made to share things. In fact the web was invented precisely
+            to have access to documents on machines at CERN without having to login to them.
+          </p>
+          <blockquote>
+            “Well, I found it frustrating that in those days, there was different
+            information on different computers, but you had to log on to different
+            computers to get at it. Also, sometimes you had to learn a different
+            program on each computer. So finding out how things worked was really
+            difficult. Often it was just easier to go and ask people when
+            they were having coffee.”
+          </blockquote>
+          <a href="https://www.w3.org/People/Berners-Lee/Kids.html">--Tim Berners-Lee</a>
+        </section>
+
+        <section>
+          <h3>Motivation</h3>
+          <p>
+            Documents now have videos, at some point had Java applets, and now have
+            virtually anything you can think of that would typically be in a
+            desktop application thanks to the additions of the HTML5 standard.
+          </p>
+          <p>
+            Even mobile applications and VR applications are moving away from
+            native app development to simply wrapping HTML5 standard documents
+            with almost all the same functionality and performance.
+          </p>
+        </section>
+
+        <section>
+          <h3>Motivation</h3>
+          <p>
+            Clearly, then, we need to strive for the best way to describe a particular
+            set of interactions on a web page given all the possibilities.
+            I hope to show that react is among the best ways to do this.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Before talking about React, one must introduce the Document Object Model (DOM).
+          </p>
+          <p>
+            The DOM is an abstract representation of the UI elements contained on a web page.
+            The DOM is encoded as HTML in a tree structure that can be intuitively parsed into memory.
+          </p>
+          <p>
+            The browser then recuisively dispatches rendering subroutines down this tree
+            of UI element descriptions. CSS offers styling context on the side.
+          </p>
+          <p>
+            All of this is abstracted away from you when you write your HTML, CSS, and Javascript event handlers.
+          </p>
+        </section>
+
+        <section>
+          <img src="static/pic_htmltree.gif" />
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            The problem with modern applications is that it would normally require many DOM manipulations to model the interactions.
+            These operations are defined on this <code>document</code> global variable and so we end up with tightly coupled concerns.
+            jQuery makes life easier but it doesn't mean your code will neccesarily compose with other systems without conflicts.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            Those of us who use react probably noticed that these issues are greatly reduced.
+          </p>
+          <ul>
+            <li>Components are modular.</li>
+            <li>Components can manage their own state.</li>
+            <li>Most components do not need to operate on the DOM directly</li>
+            <li>Your UI is defined in a declarative way</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            React components are instantiated as virtual DOM nodes.
+          </p>
+          <p>
+            Many front end frameworks encode UI elements as objects in javascript.
+            There is usually a templating language that encodes the structure
+            of a subtree of the virtual DOM. The virtual DOM itself quickly
+            helps determine what real DOM elements to update remove or add to the
+            viewing document.
+          </p>
+        </section>
+
+        <section>
+          <h3>DOM vs. Virtual DOM</h3>
+          <p>
+            All we have to do as developers is define what our particular
+            component looks like as a virtual DOM node. This will be a <code> React.NODE</code>.
+            in React. We can define our component in terms of other components
+            and get more complex sub structures in our virtual DOM.
+          </p>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<div style="display: flex; margin-left: 30%; justify-content: center; flex-direction: column; width: 300px;">
+  <ul id='todo-list1'></ul> <!-- The todo list -->
+  <input id='input1' type='text' /> <!-- The todo input -->
+  <button id='submit1'>submit</button> <!-- The form submit button -->
+</div>
+&lt;script&gt;
+window.addEventListener('load', function() {
+  // query the elements out of the DOM
+  var todoList = document.querySelector('#todo-list1');
+  var input = document.querySelector('#input1');
+  var button = document.querySelector('#submit1');
+  // Handle the submit button click by adding an <li>{text}</li> DOM node
+  button.addEventListener('click', function() {
+    var child = document.createElement('li')
+    var deleter = document.createElement('span'); // Clickable delete button
+    deleter.innerHTML=' -- delete';
+    child.innerHTML=input.value;
+    input.value='';
+    child.appendChild(deleter);
+    todoList.appendChild(child);
+    // Handle delete button clicking
+    deleter.addEventListener('click', function() {
+      todoList.removeChild(child);
+    });
+  })
+})
+&lt;/script&gt;
+            </code>
+          </pre>
+        </section>
+
+        <section>
+<div style="display: flex; margin-left: 30%; justify-content: center; flex-direction: column; width: 300px;">
+  <ul id='todo-list1'></ul> <!-- The todo list -->
+  <input id='input1' type='text' /> <!-- The todo input -->
+  <button id='submit1'>submit</button> <!-- The form submit button -->
+</div>
+<script>
+window.addEventListener('load', function() {
+  // query the elements out of the DOM
+  var todoList = document.querySelector('#todo-list1');
+  var input = document.querySelector('#input1');
+  var button = document.querySelector('#submit1');
+  // Handle the submit button click by adding an <li>{text}</li> DOM node
+  button.addEventListener('click', function() {
+    var child = document.createElement('li')
+    var deleter = document.createElement('span'); // Clickable delete button
+    deleter.innerHTML=' -- delete';
+    child.innerHTML=input.value;
+    input.value='';
+    child.appendChild(deleter);
+    todoList.appendChild(child);
+    // Handle delete button clicking
+    deleter.addEventListener('click', function() {
+      todoList.removeChild(child);
+    });
+  })
+});
+</script>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+import React, {Component} from 'react';
+class TodoList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { todos: props.initialTodos };
+    // We want to use component methods as event handlers so we bind the component itself as context.
+    this.addTodo = this.addTodo.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
+    this.readInputText = this.readInputText.bind(this);
+  }
+  addTodo() {
+    this.setState({
+      text: "",
+      todos: this.state.todos.concat([this.state.text])
+    });
+  }
+  deleteTodo(item) {
+    this.setState({
+      todos: this.state.todos.filter(todo => todo !== item)
+    });
+  }
+  readInputText(text) {
+    this.setState({ text: text });
+  }
+  render() {
+    const makeTodoElements = (item, i) => {
+      const deleter = &lt;span onClick={() =&gt; this.deleteTodo(item)}&gt;delete&lt;/span&gt;;
+      return &lt;li key={i}&gt;item -- {deleter}&lt;/li&gt;;
+    };
+    return (
+      &lt;div&gt;
+        &lt;ul&gt;{this.state.todos.map(makeTodoElements)}&lt;/ul&gt;
+        &lt;input onChange={e =&gt; this.readInputText(e.target.value)} /&gt;
+        &lt;button onClick={this.addTodo}&gt;submit&lt;/button&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+// render a TodoList into some container element in the DOM
+ReactDOM.render(
+  &lt;TodoList initialtodos={['first', 'second']}&gt;,
+  container
+);
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>React Terminology</h3>
+          <ul>
+            <li>
+              Component: A class extending <code>React.Component</code> or a function that returns a <code>React.Node</code>
+              <pre>
+                <code>
+var Echo = function(props) {
+  return React.createElement('span', props.text);
+}
+                </code>
+              </pre>
+            </li>
+            <li>Props: An object representation of the attributes of a component
+              <pre>
+                <code>&lt;clock attr2={...} attr1={...}&gt; --> props = { attr1: ..., attr2: ... }</code>
+              </pre>
+            </li>
+            <li>State: An object representation of each variable the component keeps track of internally.</li>
+          </ul>
+        </section>
+
+        <section>
+          <ul>
+            <li>PropTypes: An object representation of the types of each attribute.
+              <pre>
+                <code>
+import React from 'react';
+import PropTypes from 'prop-types';
+class Echo extends React.Component {
+  render() {
+    return &lt;span&gt;{this.props.text}&lt;/span&gt;;
+  }
+}
+Echo.propTypes = { text: PropTypes.string };
+Echo.DefaultProps = { text: '' };
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <ul>
+            <li>
+              Component#setState: A component method that asynchronously merges a object into the components state object.
+              <pre>
+                <code>
+class Counter extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { count: 0 }
+  }
+  render() {
+    const update = () => {
+      this.setState({ count: this.state.count + 1 });
+    }
+    return &lt;span onClick={update}&gt;{this.state.count}&lt;/span&gt;;
+  }
+}
+                </code>
+              </pre>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+            <h3>Lifecycle methods</h3>
+            <pre>
+              <code>
+class Echo extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    // Runs just before an update where the props have changed.
+    // You can call setState here.
+  }
+  componentDidUpdate() {
+    // Runs just after the component is re-rendered with new state or props.
+    // Don't call setState.
+  }
+  componentDidMount() {
+    // Runs after the component has it's DOM components mounted.
+    // Don't call setState.
+  }
+  componentWillUnMount() {
+    // Runs just before the component is about to get removed from the DOM.
+    // Don't call setState.
+  }
+  render() {
+    // Return a virtual DOM node using JSX or using React.createElement.
+    return <span>{this.props.text}</span>;
+  }
+}
+            </code>
+          </pre>
+          <a href="https://reactjs.org/docs/react-component.html">See all life cycle methods here</a>
+        </section>
+
+        <section>
+          <h3>But why React instead of templating?</h3>
+          <p>
+            Templating frameworks like smarty do actually solve all the problems around composable markup on a web page.
+          </p>
+          <p>
+            The part that is missing is having templates that actually need to operate on the DOM.
+            React gives us a component lifetime to encapsulate operations on DOM nodes created after render.
+            This is not suggested but there are situations that can only be solved by DOM operations.
+          </p>
+          <p>
+            Example: Drawing onto a <code>canvas</code> element.
+          </p>
+        </section>
+
+
+        <section>
+          <h3>But why React instead of templating?</h3>
+          <p>
+            React components also encapsulate concerns you would typically solve
+            in  three seperate .html, .css and .js files, even in templating languages.
+          </p>
+          <p>
+            Lastly, React components can be rendered on the server and 'hydrated' with client side data
+            on the client. This is by using <code>ReactDOMServer</code> on the server and <code>ReactDOM.hydrate</code> on the client.
+          </p>
+        </section>
+
+        <section>
+          <h3>Webpack and JSX</h3>
+          <p>
+            As you noticed, React components are written in a syntax not native to browsers.
+            We can use <code>React.createElement</code> and <code>React.createClass</code>
+            to work around this but we end up with a very large amount of code
+            for very simple components.
+          </p>
+          <p>
+            In fact Facebook depraceted the use of <code>React.createClass</code>
+            and now we can only define classes using functions or by extending
+            <code>React.Component</code> or <code>React.PureComponent</code>
+          </p>
+
+        </section>
+
+        <section>
+          <pre>
+            <code>
+const Clock = props =>
+  <div>
+    <span>{props.time.toTimeString()}</span>
+  </div>
+;
+function renderClock() {
+  ReactDOM.render(&lt;Clock time={new Date(Date.now())}/&gt;, root);
+  setTimeout(renderClock, 500);
+}
+renderClock()
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<div id="echo-container"></div>
+<script>
+window.addEventListener('load', function() {
+  const Clock = function(props) {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'span',
+        null,
+        props.time.toTimeString()
+      )
+    );
+  };
+  const root = document.querySelector('#echo-container');
+  function renderClock() {
+    const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
+    ReactDOM.render(clockElement, root);
+    setTimeout(renderClock, 500);
+  }
+  renderClock();
+});
+</script>
+            </code>
+          </pre>
+        </section>
+
+
+        <section>
+<div id="echo-container"></div>
+<script>
+window.addEventListener('load', function() {
+  const root = document.querySelector('#echo-container');
+  const Clock = function(props) {
+    return React.createElement(
+      'div',
+      null,
+      React.createElement(
+        'span',
+        null,
+        props.time.toTimeString()
+      )
+    );
+  };
+  function renderClock() {
+    const clockElement = React.createElement(Clock, { time: new Date(Date.now()) });
+    ReactDOM.render(clockElement, root);
+    window.requestAnimationFrame(renderClock)
+  }
+  renderClock()
+})
+</script>
+        </section>
+
+        <section>
+          <h3>Webpack and JSX</h3>
+          <p>Let's look at a minimal setup for using JSX and ES6.</p>
+          <pre>
+            <code>
+// project/src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+const title = 'My Minimal React Webpack Babel Setup';
+
+ReactDOM.render(
+  <div>{title}</div>,
+  document.getElementById('app')
+);
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+<!-- project/index.html -->
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+      &lt;title>The Minimal React Webpack Babel Setup&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;div id="app">&lt;/div&gt;
+    &lt;script src="bundle.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Webpack and JSX</h3>
+          <pre>
+            <code>
+// project/webpack.config.js
+module.exports = {
+  entry: [
+    './src/index.js'
+  ],
+  output: {
+    path: __dirname + '/dist',
+    publicPath: '/',
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['env', 'react']
+          }
+        }
+      }
+    ]
+  }
+};
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            The last but important part of any software system is defining how
+            components should compose. In React we have PropTypes.
+          </p>
+          <pre>
+            <code>
+Echo.propTypes = { text: PropTypes.string };
+            </code>
+          </pre>
+          <p> This gives us run time type checking. But by then it's too late!</p>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            Flow types is an npm hosted tool that optionally typechecks javascript
+            files annoted with a <code>// @flow</code> at line 0 of the file.
+          </p>
+        </section>
+
+        <section>
+          <h3>Flow types</h3>
+          <p>
+            This forces us to ensure a variable has a specefic type. This means during
+            code review you actually have to justify making a particular function argument
+            nullable.
+          </p>
+          <a href="https://flow.org/en/docs/getting-started/">https://flow.org/en/docs/getting-started/</a>
+          <pre>
+            <code>
+// @flow
+var obj = { prop: "test" };
+
+function otherMethod() {
+  if (Math.random() > 0.5) {
+    delete obj.prop;
+  }
+}
+
+function method(value: { prop?: string }) {
+  if (value.prop) {
+    otherMethod();
+    // $ExpectError
+    value.prop.charAt(0);
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <pre>
+            <code>
+// @flow
+var obj = { prop: "test" };
+
+function otherMethod() {
+  if (Math.random() > 0.5) {
+    delete obj.prop;
+  }
+}
+
+function method(value: { prop?: string }) {
+  if (value.prop) {
+    const prop = value.prop; // store the prop
+    otherMethod();
+    prop.charAt(0); // good to go!
+  }
+}
+            </code>
+          </pre>
+        </section>
+
+        <section>
+          <h3>Nuclide</h3>
+          <p>
+            A helpful editor plugin for Atom let's us see flow type errors
+            and eslint errors on the fly. This gives a very solid developer
+            experience for free.
+          </p>
+          <div><a href="https://nuclide.io/">https://nuclide.io/</a></div>
+          <img width="600px" src="static/atom-ide-ui.png" />
+        </section>
+        <section>
+          <h2>Next Time</h2>
+          <ul>
+            <li>Review and questions</li>
+            <li>Setting up a Node environment</li>
+            <li>React and Flow types</li>
+            <li>Facebook's Flow architecture and state management</li>
+          <ul>
+        </section>
+        <!-- Thanks -->
+        <section>
+          <h2>Thanks!</h2>
+          <ul>
+            <li><a href="mailto:armin.ytaheri@gmail.com">armin.ytaheri@gmail.com</a></li>
+            <li><a target="_blank" href="http://mcin-cnim.ca/">www.mcin-ncim.ca</a></li>
+          </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="lib/js/head.min.js"></script>
+    <script src="js/reveal.js"></script>
+
+    <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+          { src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'plugin/zoom-js/zoom.js', async: true },
+          { src: 'plugin/notes/notes.js', async: true }
+        ]
+      });
+
+    </script>
+
+  </body>
+</html>
